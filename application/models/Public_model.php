@@ -66,11 +66,13 @@ class Public_model extends CI_Model
         $query = $this->db->get('products');
         return $query->result_array();
     }
-    public function getProductsByCategory($category_id){
+
+    public function getProductsByCategory($categoryIdArray)
+    {
         $this->db->select('products.shop_categorie, products.id, products.quantity, products.image, products.url, products_translations.price, products_translations.title, products_translations.old_price');
         $this->db->join('products_translations', 'products_translations.for_id = products.id', 'left');
         $this->db->join('shop_categories', 'shop_categories.id = products.shop_categorie', 'left');
-        $this->db->where('products.shop_categorie =', $category_id);
+        $this->db->where_in('products.shop_categorie', $categoryIdArray);
         $this->db->where('products_translations.abbr', MY_LANGUAGE_ABBR);
         $this->db->where('visibility', 1);
         if ($this->showOutOfStock == 0) {
@@ -80,21 +82,7 @@ class Public_model extends CI_Model
         $query = $this->db->get('products');
         return $query->result_array();
     }
-    public function getProductsBySubCategory($sub_category_id){
-        $this->db->select('products.shop_categorie, products.id, products.quantity, products.image, products.url, products_translations.price, products_translations.title, products_translations.old_price');
-        $this->db->join('products_translations', 'products_translations.for_id = products.id', 'left');
-        $this->db->join('shop_categories', 'shop_categories.id = products.shop_categorie', 'left');
-        $this->db->join('shop_categories_translations', 'shop_categories_translations.id = shop_categories.id', 'left');
-        $this->db->where('products.shop_categorie =', $category_id);
-        $this->db->where('products_translations.abbr', MY_LANGUAGE_ABBR);
-        $this->db->where('visibility', 1);
-        if ($this->showOutOfStock == 0) {
-            $this->db->where('quantity >', 0);
-        }
-        $this->db->order_by('products.id', 'desc');
-        $query = $this->db->get('products');
-        return $query->result_array();
-    }
+
     public function getAtlas()
     {
         $this->db->select('brands.id, products.id, products.quantity, products.image, products.url, products_translations.price, products_translations.title, products_translations.old_price');
@@ -299,6 +287,48 @@ class Public_model extends CI_Model
             }
         }
         return $arr;
+    }
+
+    public function getCategoryById($categoryId)
+    {
+        $this->db->select('shop_categories.sub_for, shop_categories.id, shop_categories_translations.name');
+        $this->db->where('abbr', MY_LANGUAGE_ABBR);
+        $this->db->where('shop_categories.id', $categoryId);
+        $this->db->join('shop_categories', 'shop_categories.id = shop_categories_translations.for_id', 'INNER');
+        $query = $this->db->get('shop_categories_translations');
+        if ($query === false) {
+            return null;
+        }
+
+        $result = $query->result_array();
+
+        if (empty($result)) {
+            return null;
+        }
+        return $result[0];
+    }
+
+    public function getSubCategoryIdArrayForCategory($categoryId)
+    {
+        $this->db->select('GROUP_CONCAT(shop_categories.id) AS list_of_category_ids');
+        $this->db->where('abbr', MY_LANGUAGE_ABBR);
+        $this->db->where('shop_categories.sub_for', $categoryId);
+        $this->db->join('shop_categories', 'shop_categories.id = shop_categories_translations.for_id', 'INNER');
+        $query = $this->db->get('shop_categories_translations');
+        if ($query === false) {
+            return [];
+        }
+
+        $result = $query->result_array();
+
+        if (empty($result)) {
+            return [];
+        }
+
+        if (empty($result[0]['list_of_category_ids'])) {
+            return [];
+        }
+        return explode(',', $result[0]['list_of_category_ids']);
     }
 
     public function getSeo($page)

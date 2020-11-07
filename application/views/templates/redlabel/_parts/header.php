@@ -164,16 +164,17 @@
                                                 <span id="remove-verticalmenu" class="fa fa-times"></span>
                                                 <div class="megamenu-pattern">
                                                     <div class="container-mega">                                                        
-                                                        <?php if (!empty($footerCategories)) { ?>
+                                                        <?php if (!empty($navCategories)) { ?>
                                                             <ul class="megamenu">
-                                                                <?php foreach ($footerCategories as $key => $categorie) { ?>
+                                                                <?php foreach ($navCategories as $category) { ?>
                                                                     <li class="item-vertical  style1 with-sub-menu hover">                                                                
                                                                         <p class="close-menu"></p>
-                                                                        <a href="javascript:void(0);" class="clearfix" data-categorie-id="<?= $key ?>">
+                                                                        <a href="/categories/<?= $category['id'] ?>" class="clearfix" data-categorie-id="<?= $category['id'] ?>">
                                                                             <span class="label"></span>                                                                    
-                                                                            <span><?= $categorie ?></span>                                                                     
+                                                                            <span><?= $category['name'] ?></span>
                                                                             <b class="fa-angle-right"></b>
                                                                         </a>
+                                                                        <?php if (!empty($category['children'])) { ?>
                                                                         <div class="sub-menu" data-subwidth="30">
                                                                             <div class="content">
                                                                                 <div class="row">
@@ -182,14 +183,14 @@
                                                                                             <div class="col-md-12 static-menu">
                                                                                                 <div class="menu">
                                                                                                     <ul>
+                                                                                                        <?php foreach($category['children'] as $subCategory) { ?>
                                                                                                         <li>
-                                                                                                            <a href="javascript:void(0);" class="main-menu"><?= $categorie ?></a>
-                                                                                                            <ul>
-                                                                                                                <li>
-                                                                                                                    <a href="#">Sub 1</a>
-                                                                                                                </li>
-                                                                                                            </ul>
+                                                                                                            <a href="/categories/<?= $subCategory['id'] ?>" class="clearfix" data-categorie-id="<?= $subCategory['id'] ?>">
+                                                                                                                <span class="label"></span>
+                                                                                                                <span><?= $subCategory['name'] ?></span>
+                                                                                                            </a>
                                                                                                         </li>
+                                                                                                        <?php } ?>
                                                                                                     </ul>
                                                                                                 </div>
                                                                                             </div>
@@ -198,6 +199,7 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
+                                                                        <?php } ?>
                                                                     </li>
                                                                 <?php } ?>
                                                             </ul>

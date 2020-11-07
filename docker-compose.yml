@@ -1,0 +1,56 @@
+version: '3'
+
+services:
+  nginx:
+    container_name: acquygiaphong-nginx
+    depends_on:
+      - php-fpm
+    image: nginx:alpine
+    tty: true
+    ports:
+      - ${NGINX_PORT_EXPOSE}:80
+    volumes:
+      - ./:/var/www
+      - ./.docker/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - acquygiaphong
+  php-fpm:
+    container_name: acquygiaphong-fpm
+    depends_on:
+      - mysql
+    build:
+      context: .
+      dockerfile: .docker/php-fpm/Dockerfile
+    environment:
+      PHP_OPCACHE_VALIDATE_TIMESTAMPS: 1
+    volumes:
+      - ./:/var/www
+      - ./.docker/php-fpm/php7.4.ini:/usr/local/etc/php/php.ini
+    expose:
+      - '9000'
+    networks:
+      - acquygiaphong
+  mysql:
+    container_name: acquygiaphong-db
+    image: mariadb:latest
+    ports:
+      - ${MYSQL_PORT_EXPOSE}:3306
+    environment:
+      MYSQL_DATABASE: acquygiaphong
+      MYSQL_USER: dev
+      MYSQL_PASSWORD: dev@123
+      MYSQL_ROOT_PASSWORD: dev@123
+      MYSQL_ROOT_HOST: '%'
+    volumes:
+      - acquygiaphong-db-data:/var/lib/mysql/
+      - ./.docker/mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - acquygiaphong
+
+networks:
+  acquygiaphong:
+    driver: bridge
+
+volumes:
+  acquygiaphong-db-data:
+    driver: local

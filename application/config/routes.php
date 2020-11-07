@@ -78,10 +78,6 @@ $route['template/imgs/(:any)'] = "Loader/templateCssImage/$1";
 $route['templatecss/imgs/(:any)'] = "Loader/templateCssImage/$1";
 $route['templatecss/(:any)'] = "Loader/templateCss/$1";
 $route['templatejs/(:any)'] = "Loader/templateJs/$1";
-//category
-$route['ac-quy/(.+)'] = 'Home/show_post_by_brand_id/$1';
-$route['dong-xe/(.+)'] = 'Home/show_post_by_sub_cat_id/$1';
-$route['xe/(.+)'] = 'Home/show_post_by_cat_id/$1';
 
 // Products urls style
 $route['(:any)_(:num)'] = "home/viewProduct/$2";

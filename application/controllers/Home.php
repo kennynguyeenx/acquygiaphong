@@ -31,19 +31,23 @@ class Home extends MY_Controller
         $this->render('home', $head, $data);
     }
 
-    public function productsByCategory($categoryId, $page = 0)
+    public function productsByCategory($categoryName, $page = 0)
     {
         $head = $this->loadHeader($this->Public_model->getSeo('home'));
         $data = $this->loadGeneralData();
-        $category = $this->Public_model->getCategoryById($categoryId);
-        $subCategoryIdArray = $this->Public_model->getSubCategoryIdArrayForCategory($categoryId);
-        $categoryIdArray = array_merge($subCategoryIdArray, [$categoryId]);
-        $data['products'] = $this->Public_model->getProductsByCategory($categoryIdArray);
-        $data['category'] = $category;
-        if (!empty($category) && !empty($category['sub_for'])) {
-            $parentCategory = $this->Public_model->getCategoryById($category['sub_for']);
-            $data['parentCategory'] = $parentCategory;
+        $category = $this->Public_model->getCategoryByName(urldecode($categoryName));
+        $categoryIdArray = [0];
+        if (!empty($category)) {
+            $subCategoryIdArray = $this->Public_model->getSubCategoryIdArrayForCategory($category['id']);
+            $categoryIdArray = array_merge($subCategoryIdArray, [$category['id']]);
+            $data['category'] = $category;
+            if (!empty($category['sub_for'])) {
+                $parentCategory = $this->Public_model->getCategoryById($category['sub_for']);
+                $data['parentCategory'] = $parentCategory;
+            }
         }
+
+        $data['products'] = $this->Public_model->getProductsByCategory($categoryIdArray);
         $rowscount = $this->Public_model->productsCount($_GET);
         $data['links_pagination'] = pagination('home', $rowscount, $this->num_rows);
 

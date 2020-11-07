@@ -169,10 +169,12 @@
                                                                 <?php foreach ($navCategories as $category) { ?>
                                                                     <li class="item-vertical  style1 with-sub-menu hover">                                                                
                                                                         <p class="close-menu"></p>
-                                                                        <a href="/categories/<?= $category['id'] ?>" class="clearfix" data-categorie-id="<?= $category['id'] ?>">
+                                                                        <a href="/xe/<?= $category['name'] ?>" class="clearfix" data-categorie-id="<?= $category['id'] ?>">
                                                                             <span class="label"></span>                                                                    
                                                                             <span><?= $category['name'] ?></span>
-                                                                            <b class="fa-angle-right"></b>
+                                                                            <?php if (!empty($category['children'])) { ?>
+                                                                                <b class="fa-angle-right"></b>
+                                                                            <?php } ?>
                                                                         </a>
                                                                         <?php if (!empty($category['children'])) { ?>
                                                                         <div class="sub-menu" data-subwidth="30">
@@ -185,7 +187,7 @@
                                                                                                     <ul>
                                                                                                         <?php foreach($category['children'] as $subCategory) { ?>
                                                                                                         <li>
-                                                                                                            <a href="/categories/<?= $subCategory['id'] ?>" class="clearfix" data-categorie-id="<?= $subCategory['id'] ?>">
+                                                                                                            <a href="/xe/<?= $subCategory['name'] ?>" class="clearfix" data-categorie-id="<?= $subCategory['id'] ?>">
                                                                                                                 <span class="label"></span>
                                                                                                                 <span><?= $subCategory['name'] ?></span>
                                                                                                             </a>

@@ -79,11 +79,6 @@ $route['templatecss/imgs/(:any)'] = "Loader/templateCssImage/$1";
 $route['templatecss/(:any)'] = "Loader/templateCss/$1";
 $route['templatejs/(:any)'] = "Loader/templateJs/$1";
 
-//category
-$route['ac-quy/(.+)'] = 'Home/show_post_by_brand_id/$1';
-$route['dong-xe/(.+)'] = 'Home/show_post_by_sub_cat_id/$1';
-$route['categories/(.+)'] = 'Home/productsByCategory/$1';
-
 // Products urls style
 $route['(:any)_(:num)'] = "home/viewProduct/$2";
 $route['(\w{2})/(:any)_(:num)'] = "home/viewProduct/$3";
@@ -97,6 +92,9 @@ $route['(\w{2})/blog/(:any)_(:num)'] = "blog/viewPost/$3";
 // Shopping cart page
 $route['shopping-cart'] = "ShoppingCartPage";
 $route['(\w{2})/shopping-cart'] = "ShoppingCartPage";
+
+//category
+$route['xe/(.+)'] = 'Home/productsByCategory/$1';
 
 // Shop page (greenlabel template)
 $route['ac-quy'] = "home/shop";

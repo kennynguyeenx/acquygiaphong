@@ -6,10 +6,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <ul class="breadcrumb">
         <li><a href="#"><i class="fa fa-home"></i></a></li>
         <?php if (!empty($parentCategory)) { ?>
-            <li><a href="/categories/<?= $parentCategory['id'] ?>"><?= $parentCategory['name'] ?></i></a></li>
+            <li><a href="/xe/<?= $parentCategory['name'] ?>"><?= $parentCategory['name'] ?></i></a></li>
         <?php } ?>
         <?php if (!empty($category)) { ?>
-            <li><a href="/categories/<?= $category['id'] ?>"><?= $category['name'] ?></a></li>
+            <li><a href="/xe/<?= $category['name'] ?>"><?= $category['name'] ?></a></li>
         <?php } ?>
     </ul>
 

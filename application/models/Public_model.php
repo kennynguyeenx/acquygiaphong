@@ -308,6 +308,25 @@ class Public_model extends CI_Model
         return $result[0];
     }
 
+    public function getCategoryByName($categoryName)
+    {
+        $this->db->select('shop_categories.sub_for, shop_categories.id, shop_categories_translations.name');
+        $this->db->where('abbr', MY_LANGUAGE_ABBR);
+        $this->db->where('shop_categories_translations.name', $categoryName);
+        $this->db->join('shop_categories', 'shop_categories.id = shop_categories_translations.for_id', 'INNER');
+        $query = $this->db->get('shop_categories_translations');
+        if ($query === false) {
+            return null;
+        }
+
+        $result = $query->result_array();
+
+        if (empty($result)) {
+            return null;
+        }
+        return $result[0];
+    }
+
     public function getSubCategoryIdArrayForCategory($categoryId)
     {
         $this->db->select('GROUP_CONCAT(shop_categories.id) AS list_of_category_ids');
